@@ -16,6 +16,14 @@ public class CallRecordProcessorImp implements CallRecordsProcessor {
 	private BillingGateway billingGateway;
 	long totalDuration=0;
 	
+	public long getTotalDuration() {
+		return totalDuration;
+	}
+
+	public void setTotalDuration(long totalDuration) {
+		this.totalDuration = totalDuration;
+	}
+
 	public CallRecordProcessorImp(BillingGateway billingGateway) {
 		super();
 		this.billingGateway = billingGateway;
@@ -27,14 +35,6 @@ public class CallRecordProcessorImp implements CallRecordsProcessor {
 		
         try {
         	billingGateway.beginBatch();
-////        	String val = "";
-//        	java.net.URL test1 = getClass().getResource("/");
-//        	java.net.URL test2 = getClass().getClassLoader().getResource("/");            
-//        	java.net.URL test3 = getClass().getClassLoader().getResource("../");
-//
-//            System.out.println(test1.getPath());
-//            System.out.println(test2.getPath());
-//            System.out.println(test3.getPath());
     		BufferedReader r = new BufferedReader(new InputStreamReader(in));
 
             // reads each line
@@ -43,7 +43,6 @@ public class CallRecordProcessorImp implements CallRecordsProcessor {
             HashMap<String, List> workAggregateHashMap = new HashMap();
             int previousSeqNum=-1;;
 			while((CDR = r.readLine()) != null) {
-//			   val = val + CDR+"\r\n";
 			   String[] splitCDR=splitCDR(CDR);
 			   if (splitCDR==null) {
 				   throw new Exception("Bed Format of a Call Data Record");
@@ -123,17 +122,7 @@ public class CallRecordProcessorImp implements CallRecordsProcessor {
 
 				   //Records for "ongoing calls", with the same `callId, aNum and bNum`, must be aggregated. When you read the "end of call record", 
 				   //your aggregated duration must be sent, using the `BillingGateway.consume` method.
-//				   if (splitCDR[3].equals("2")) {
-//					   billingGateway.consume(
-//							   splitCallIdAndSeqNum[0], //callId Call identity string terminated by : . `_` (underscore) represents an incomplete record.
-//							   Integer.parseInt(splitCallIdAndSeqNum[1]), //A sequence number terminated by ,
-//							   splitCDR[1], //A-number string (the one making the call) terminated by ,
-//							   splitCDR[2], //B-number string (the one receiving the call) terminated by ,
-//							   Byte.parseByte(splitCDR[3]), //The reason record was created, terminated by , 1-represents ongoing call, 2-represents end of call,0-is used for `incomplete records` (can appear during network problems)
-//							   Integer.parseInt((String) workAggregateHashMap.get(key).get(5)) //Duration of the call, in minutes, terminated by new row
-//						);
-//					   workAggregateHashMap.remove(key);
-//				   }
+
 			   }
 			   else {
 				   throw new Exception("Bed Format of a Call Data Record section CallID or SeqNUm");
